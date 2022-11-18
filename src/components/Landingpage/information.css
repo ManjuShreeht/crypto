@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: flex-start;
   height: 50vh;
+
     padding: 1rem 1.5rem;
     
 }
@@ -36,16 +37,18 @@ transition: all 0.3s;
     margin-top: 2rem;
 }
 
+/* phone component css */
 .phonebox{
     position: relative;
     width:100%;
     margin-right:25rem;
+  
    
 }
 .gradient{
     position: absolute;
     top:5rem;
-    left:50px;
+    left:30px;
     right: 5rem;
     z-index: -1;
     width: 70%;
@@ -58,9 +61,6 @@ transition: all 0.3s;
   right: 2rem;
     width: 70%;
     min-width: 200px;
-}
-img{
-
 }
 
 
@@ -77,11 +77,12 @@ img{
         flex-direction: column;
    
     }
-    .phonebox{
+    .phonebox{margin-top: 2rem;
+       
      
     }
     .gradient,.iphone{
-     left:30%;
+     left:20%;
     }
     .gradient{
       

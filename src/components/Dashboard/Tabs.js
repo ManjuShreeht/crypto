@@ -5,13 +5,16 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+//use tabs in mui
 
 
-import Grid from '../gridcomponents/Grid';
+import Grid from '../Dashboard/Grid';
+import './grid.css'
+//from dasbaord data props passed
 
-export default function LabTabs({data}) {
+export default function Tabs({data}) {
   const [value, setValue] = React.useState('1');
-
+// 1 by default first one select grid ,if 2 second one if 0 no one select
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -31,13 +34,17 @@ export default function LabTabs({data}) {
       <TabContext value={value}>
         <Box >
           <TabList onChange={handleChange}  varient="fullWidth">
-            <Tab label="Grid" value="grid"  sx={style} />
-            <Tab label="List" value="list" sx={style} />
+            {/* two tabs grid and list  */}
+            <Tab label="Grid" value={1} sx={style} />
+            {/* sx is a mui style compnent */}
+            <Tab label="List" value={2} sx={style} />
             
           </TabList>
         </Box>
         
-        <TabPanel value="grid">
+        {/* grid and list same data display but differnt design */}
+        {/* grid panel if value=grid grid data display */}
+        <TabPanel value={1}>
           <div className='grid-flex'>
 
           {
@@ -47,7 +54,8 @@ export default function LabTabs({data}) {
           }
           </div>
         </TabPanel>
-        <TabPanel value="list"></TabPanel>
+        {/* list data display */}
+        <TabPanel value={2}></TabPanel>
        
       </TabContext>
     </Box>

@@ -1,12 +1,14 @@
 import React from 'react'
-import Header from '../components/common/Header/Header'
-import Intro from '../landingpage/intro/Intro'
+import Header from '../components/Header/Header'
+import Infromation from '../components/Landingpage/Infromation'
+
 
 function Home() {
   return (
     <div >
       <Header />
-      <Intro />
+      <Infromation />
+     
     </div>
   )
 }
