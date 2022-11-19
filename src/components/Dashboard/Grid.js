@@ -1,51 +1,69 @@
-import React from 'react'
-import './grid.css'
-import MovingIcon from '@mui/icons-material/Moving';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import React from "react";
+import TrendingDownRoundedIcon from "@mui/icons-material/TrendingDownRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import "./grid.css";
+import { motion } from "framer-motion";
 
-function Grid({coin}) {
+function Grid({ coin, delay }) {
   return (
-    <div className='grid'>
-
-    <div className={`grid-box ${coin.price_change_percentage_24h<0 && "grid-box-red"} `} >
-        <div className='grid-info'>
-
-            <img src={coin.image} className="grid-logo" alt="img" />
-        
-        <div className='grid-name'>
-            <p className='grid-symbol'>{coin.symbol}-USD</p>
-            <p className='coin-name'>{coin.name}</p>
-        </div>
-        </div>
-
-        {/* greater than zero we use different css make color green */}
-     {coin.price_change_percentage_24h > 0?
-      (  <div className="chip-flex">
-      <div className="coin-chip">{coin.price_change_percentage_24h.toFixed(2) + "%"}
-      </div>
-      <TrendingUpIcon className='grid-icon' />
-      </div>):
-      (
-        // less than zeo disply red color
-        <div className="chip-flex">
-        <div className='coin-chip coin-red' >
-        {coin.price_change_percentage_24h.toFixed(2)+"%"}   
-        </div>
-        <TrendingDownIcon  className='grid-icon icon-red'/>
-        </div>
-        
-        )} 
-        <p className='grid-price' style={{color:coin.price_change_percentage_24h<0 ?"var(--red)":"var(--green)"}}>${coin.current_price.toLocaleString()}</p>
-        <div>
-        <p className='volume-text'><span> Total Volume : </span>{coin.total_volume.toLocaleString()}</p>
-        <p className='volume-text'><span> Total Market Cap : </span>
-        {coin.market_cap.toLocaleString()}</p>
-        {/* toLocaleString---add comma, to price */}
+    <a href={`/coin/${coin.id}`}>
+      <motion.div
+        initial={{ y: 60, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3, delay: delay }}
+        className={`grid-box ${
+          coin.price_change_percentage_24h < 0 && "grid-box-red"
+        }`}
+      >
+        <div className="info-flex">
+          <img src={coin.image} className="coin-logo" />
+          <div className="name-flex">
+            <p className="coin-symbol">{coin.symbol}-USD</p>
+            <p className="coin-name">{coin.name}</p>
           </div>
-    </div>
-    </div>
-  )
+        </div>
+        <div>
+          {coin.price_change_percentage_24h > 0 ? (
+            <div className="chip-flex">
+              <div className="coin-chip">
+                {coin.price_change_percentage_24h.toFixed(2) + " %"}
+              </div>
+              <TrendingUpRoundedIcon className="icon" />
+            </div>
+          ) : (
+            <div className="chip-flex">
+              <div className="coin-chip chip-red">
+                {coin.price_change_percentage_24h.toFixed(2) + " %"}
+              </div>
+              <TrendingDownRoundedIcon className="icon chip-red" />
+            </div>
+          )}
+        </div>
+
+        <p
+          className="coin-price"
+          style={{
+            color:
+              coin.price_change_percentage_24h < 0
+                ? "var(--red)"
+                : "var(--green)",
+          }}
+        >
+          $ {coin.current_price.toLocaleString()}
+        </p>
+        <div>
+          <p className="volume-text">
+            <strong>Total Volume :</strong> $
+            {coin.total_volume.toLocaleString()}
+          </p>
+          <p className="volume-text">
+            <strong>Total Market Cap :</strong> $
+            {coin.market_cap.toLocaleString()}
+          </p>
+        </div>
+      </motion.div>
+    </a>
+  );
 }
 
-export default Grid
+export default Grid;

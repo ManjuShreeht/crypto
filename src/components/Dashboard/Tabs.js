@@ -1,65 +1,63 @@
+import { useState } from "react";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { createTheme, ThemeProvider } from "@mui/material";
+import Grid from "../../components/Dashboard/Grid";
+import "./grid.css";
+import "./list.css"
+import List from "../../components/Dashboard/List";
+export default function Tabs({ data }) {
+  const [tabValue, setTabValue] = useState("grid");
 
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-//use tabs in mui
-
-
-import Grid from '../Dashboard/Grid';
-import './grid.css'
-//from dasbaord data props passed
-
-export default function Tabs({data}) {
-  const [value, setValue] = React.useState('1');
-// 1 by default first one select grid ,if 2 second one if 0 no one select
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabValue(newValue);
   };
 
-    const style={
-    color:"var(--white)",
-    fontFamily:"Inter",
-    fontSize:"1.2rem",
-    width:"50vw",
-    fontWeight:"600",
-    textTransform:"capitalize",
-      marginLeft:"5rem",
-      
+  const style = {
+    color: "var(--white)",
+    width: "50vw",
+    fontSize: "1.2rem",
+    fontWeight: 600,
+    fontFamily: "Inter",
+    textTransform: "capitalize",
   };
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#3a80e9",
+      },
+    },
+  });
+
   return (
-    <Box >
-      <TabContext value={value}>
-        <Box >
-          <TabList onChange={handleChange}  varient="fullWidth">
-            {/* two tabs grid and list  */}
-            <Tab label="Grid" value={1} sx={style} />
-            {/* sx is a mui style compnent */}
-            <Tab label="List" value={2} sx={style} />
-            
-          </TabList>
-        </Box>
-        
-        {/* grid and list same data display but differnt design */}
-        {/* grid panel if value=grid grid data display */}
-        <TabPanel value={1}>
-          <div className='grid-flex'>
-
-          {
-            data.map((item,index)=>{
-              return <Grid coin={item} />
-            })
-          }
+    <div>
+      <ThemeProvider theme={theme}>
+        <TabContext value={tabValue}>
+          <div>
+            <TabList variant="fullWidth" onChange={handleChange}>
+              <Tab label="Grid" value={"grid"} sx={style} />
+              <Tab label="List" value={"list"} sx={style} />
+            </TabList>
           </div>
-        </TabPanel>
-        {/* list data display */}
-        <TabPanel value={2}></TabPanel>
-       
-      </TabContext>
-    </Box>
+          <TabPanel value={"grid"}>
+            <div className="grid-flex">
+              {data.map((item, index) => (
+                <Grid coin={item} key={index} delay={(index % 5) * 0.1} />
+              ))}
+            </div>
+          </TabPanel>
+          <TabPanel value={"list"}>
+            <table className="list-flex">
+              {data.map((item, i) => (
+                <List coin={item} delay={(i % 7) * 0.1} />
+              ))}
+            </table>
+          </TabPanel>
+        </TabContext>
+      </ThemeProvider>
+    </div>
   );
 }
-
-
