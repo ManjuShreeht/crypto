@@ -5,7 +5,7 @@ import Outlinebutton from '../../components/Button/Outlinebutton'
 import './information.css'
 import {motion} from 'framer-motion'
 import Phonecomponent from '../../components/Landingpage/Phonecomponent'
-
+import { RWebShare } from "react-web-share";
 //use framer motion animation to design a content
 //framer.com/docs/animation
 
@@ -28,7 +28,20 @@ function Infromation() {
                 whileInView={{x:0,opacity:1,rotateZ:0}}
                 transition={{duration:0.5,delay:0.25}}>
                    <Button text="dashboard"/>
-                   <Outlinebutton  text="share"/>
+
+
+                   
+          <RWebShare
+            data={{
+              text: "Crypto Dashboard ",
+              url: "https://crypto-dashboard-nov.net.app/", //neetligy link
+              title: "Crypto Dashboard",
+            }}
+            onClick={() => console.log("shared successfully!")}
+          >
+            <Button text="Share"  />
+          </RWebShare>
+                  
                 </motion.div>
             </div>
             <div className='phone'>

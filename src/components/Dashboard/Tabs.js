@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import Grid from "../../components/Dashboard/Grid";
 import "./grid.css";
 import "./list.css"
+import "./tab.css"
 import List from "../../components/Dashboard/List";
 export default function Tabs({ data }) {
   const [tabValue, setTabValue] = useState("grid");

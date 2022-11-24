@@ -12,6 +12,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import './Header.css'
 import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from 'react-router-dom';
 
 // sidebar used for mobile application
 // here we use material UI (drawer components)
@@ -40,16 +41,20 @@ export default function Sidebar() {
           
           {/* this are the content in the navbar */}
         <div className='drawer'>
-        <a href='/'>
+        <Link to='/'>
             <p className='link'>home</p>
-        </a>
-        <a href='/compare'>
+        </Link>
+        <Link to='/compare'>
             <p className='link'>compare</p>
-        </a>
-        <a href='/dashboard'>
-          <Button  className='drawer_btn' >dashboard
-            </Button>
-        </a>
+        </Link>
+        <Link to='/dashboard'>
+          <p  className='link' >whishList
+            </p>
+        </Link>
+        <Link to='/dashboard'>
+          <p className='link' >dashboard
+            </p>
+        </Link>
         </div> 
           </Drawer>
        
