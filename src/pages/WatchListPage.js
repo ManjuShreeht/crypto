@@ -57,9 +57,9 @@ function WatchListPage() {
                 alignItems: "center",
               }}
             >
-              <a href="/dashboard">
+              <Link to="/dashboard">
                 <Button text="Dashboard" />
-              </a>
+              </Link>
             </div>
           </div>
         )}
