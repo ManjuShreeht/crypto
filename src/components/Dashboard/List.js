@@ -6,6 +6,7 @@ import { convertNumbers } from "../../components/Dashboard/convertNumber";
 import { motion } from "framer-motion";
 import Tooltip from "@mui/material/Tooltip";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+import {Link} from 'react-router-dom'
 
 import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 import {addToWatchlist} from '../../components/watchlist/addtowatchlist'
