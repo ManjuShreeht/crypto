@@ -9,7 +9,7 @@ export const removeFromWatchlist = (id,e) => {
       console.log("newlist is>>", newList.toString());
       localStorage.setItem("watchlist", newList.toString());
       window.location.reload();
-      location.href="https://google.com"
+      // location.href="https://google.com"
       //windowlocation=window.location
       // e.preventDefault();
     }
