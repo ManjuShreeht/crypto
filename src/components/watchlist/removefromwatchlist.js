@@ -8,8 +8,8 @@ export const removeFromWatchlist = (id,e) => {
       const newList = previousList.filter((item) => item != id);
       console.log("newlist is>>", newList.toString());
       localStorage.setItem("watchlist", newList.toString());
-      //window.location.reload();
-      windowlocation=window.location
+      window.location.reload(false);
+      //windowlocation=window.location
       // e.preventDefault();
     }
   };
