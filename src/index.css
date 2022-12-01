@@ -83,7 +83,7 @@ a{
   width: 2rem;
   background-color: var(--darkgrey);
   border-radius: 50%;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -112,6 +112,8 @@ a{
 .select-coin {
   border-radius: 10rem !important;
 }
+
+
 
 @media only screen and (max-width: 800px) {
   .top-btn {

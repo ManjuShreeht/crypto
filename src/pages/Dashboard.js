@@ -7,6 +7,7 @@ import Search from '../components/Search/Search';
 import  ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import Loading from '../components/Loading/Loading';
 import PaginationCompnent from '../components/Pagination/PaginationComponent';
+import Footer from '../components/Footer/Footer';
 
 function Dashboard() {
   // use array to store api data
@@ -48,13 +49,13 @@ function Dashboard() {
   }),[]);
 
   // go to top
+  var mybutton = document.getElementById("myBtn");
 
   function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   }
 
-  let mybutton = document.getElementById("myBtn");
 
   window.onscroll = function () {
     scrollFunction();
@@ -93,14 +94,12 @@ function Dashboard() {
       <Search  search={search} setSearch={setSearch}/>
       {/* send props to tabs components */}
     <Tabs  data={filteredCoins} />
+      <Footer className='footer1' />
     {/* to go up ,top -btn styled in inde.css */}
     <div onClick={() => topFunction()} id="myBtn" className="top-btn">
             <ArrowUpwardIcon sx={{ color: "var(--blue)" }} />
           </div>
-      {/* <PaginationCompnent  pageNumber={pageNumber} handleChange={handleChange} /> */}
-    
-        {/*  */}
-      
+     
       </>)}
     </div>
 

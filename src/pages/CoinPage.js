@@ -13,7 +13,7 @@ import { getCoinPrice } from '../components/Coin/getCoinPrice'
 import SelectDays from '../components/Coin/SelectDays'
 import TogglePrice from '../components/Toggle/Toggle'
 import { convertNumbers } from '../components/Dashboard/convertNumber'
-
+import {setCoinDataFunction} from '../components/setCoinDataFunction'
 function CoinPage() { 
   
    const { id } = useParams(); //router component to access data through url id
@@ -78,18 +78,21 @@ const getData = async () => {
 
   if (data) {
     console.log("data", data);
-    setCoin({ //add all id data to setCoin statehook
-      id: data.id,
-      name: data.name,
-      symbol: data.symbol,
-      image: data.image.large,
-      desc: data.description.en,
-      price_change_percentage_24h:
-        data.market_data.price_change_percentage_24h,
-      total_volume: data.market_data.total_volume.usd,
-      current_price: data.market_data.current_price.usd,
-      market_cap: data.market_data.market_cap.usd,
-    });
+    // setCoin({ //add all id data to setCoin statehook
+    // //   id: data.id,
+    // //   name: data.name,
+    // //   symbol: data.symbol,
+    // //   image: data.image.large,
+    // //   desc: data.description.en,
+    // //   price_change_percentage_24h:
+    // //     data.market_data.price_change_percentage_24h,
+    // //   total_volume: data.market_data.total_volume.usd,
+    // //   current_price: data.market_data.current_price.usd,
+    // //   market_cap: data.market_data.market_cap.usd,
+    // // });
+
+    //create separate function and  call
+    setCoinDataFunction(setCoin,data)
     setLoading(false);  //false the loading state of load the data
   }
   if (prices) {     //if price true

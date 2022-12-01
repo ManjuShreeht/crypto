@@ -15,8 +15,9 @@ import { getCoinPrice } from '../components/Coin/getCoinPrice'
 import SelectDays from '../components/Coin/SelectDays'
 import TogglePrice from '../components/Toggle/Toggle'
 import { convertNumbers } from '../components/Dashboard/convertNumber'
+import Footer from '../components/Footer/Footer'
 
-
+import {setCoinDataFunction} from '../components/setCoinDataFunction'
 
 
 
@@ -111,33 +112,11 @@ function Compare() {
       const data2 = await getCoinData(coin2);
   
       if (data1) {
-        setCoinData1({
-          id: data1.id,
-          name: data1.name,
-          symbol: data1.symbol,
-          image: data1.image.large,
-          desc: data1.description.en,
-          price_change_percentage_24h:
-            data1.market_data.price_change_percentage_24h,
-          total_volume: data1.market_data.total_volume.usd,
-          current_price: data1.market_data.current_price.usd,
-          market_cap: data1.market_data.market_cap.usd,
-        });
+       setCoinDataFunction(setCoinData1,data1)
       }
   
       if (data2) {
-        setCoinData2({
-          id: data2.id,
-          name: data2.name,
-          symbol: data2.symbol,
-          image: data2.image.large,
-          desc: data2.description.en,
-          price_change_percentage_24h:
-            data2.market_data.price_change_percentage_24h,
-          total_volume: data2.market_data.total_volume.usd,
-          current_price: data2.market_data.current_price.usd,
-          market_cap: data2.market_data.market_cap.usd,
-        });
+        setCoinDataFunction(setCoinData2,data2)
       }
       getPrices(coin1, coin2, days, priceType);
       setLoading(false);
@@ -181,36 +160,15 @@ function Compare() {
         setCoin1(e.target.value);
         const data1 = await getCoinData(e.target.value);
         if (data1) {
-          setCoinData1({
-            id: data1.id,
-            name: data1.name,
-            symbol: data1.symbol,
-            image: data1.image.large,
-            desc: data1.description.en,
-            price_change_percentage_24h:
-              data1.market_data.price_change_percentage_24h,
-            total_volume: data1.market_data.total_volume.usd,
-            current_price: data1.market_data.current_price.usd,
-            market_cap: data1.market_data.market_cap.usd,
-          });
+          setCoinDataFunction(setCoinData1,data1)
           getPrices(e.target.value, coin2, days, priceType);
+          // setCoinDataFunction(setCoin,data)
         }
       } else {
         setCoin2(e.target.value);
         const data2 = await getCoinData(e.target.value);
         if (data2) {
-          setCoinData2({
-            id: data2.id,
-            name: data2.name,
-            symbol: data2.symbol,
-            image: data2.image.large,
-            desc: data2.description.en,
-            price_change_percentage_24h:
-              data2.market_data.price_change_percentage_24h,
-            total_volume: data2.market_data.total_volume.usd,
-            current_price: data2.market_data.current_price.usd,
-            market_cap: data2.market_data.market_cap.usd,
-          });
+          setCoinDataFunction(setCoinData2,data2)
           getPrices(coin1, e.target.value, days, priceType);
         }
       }
@@ -268,7 +226,9 @@ function Compare() {
             </div>
             <div className="grey-container" style={{ marginBottom: "2rem" }}>
               <CoinInfo name={coinData2.name} description={coinData2.desc} />
+            
             </div>
+            <Footer />
           </>
         )}
       </>

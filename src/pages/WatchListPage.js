@@ -7,6 +7,7 @@ import Button from "../components/Button/Button";
 
 import Tabs from "../components/Dashboard/Tabs";
 import{DASHBOARD_API_URL} from  '../ApiUrl'
+import Footer from '../components/Footer/Footer';
 
 function WatchListPage() {
   const watchlist = localStorage.getItem("watchlist")
@@ -64,6 +65,7 @@ function WatchListPage() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

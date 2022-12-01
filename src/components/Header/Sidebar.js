@@ -47,7 +47,7 @@ export default function Sidebar() {
         <Link to='/compare'>
             <p className='link'>compare</p>
         </Link>
-        <Link to='/dashboard'>
+        <Link to='/watchList'>
           <p  className='link' >whishList
             </p>
         </Link>
@@ -55,6 +55,7 @@ export default function Sidebar() {
           <p className='link' >dashboard
             </p>
         </Link>
+        
         </div> 
           </Drawer>
        
