@@ -1,13 +1,12 @@
-
-import Header from '../components/Header/Header'
-import {Link} from 'react-router-dom'
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Button from "../components/Button/Button";
-
-import Tabs from "../components/Dashboard/Tabs";
-import{DASHBOARD_API_URL} from  '../ApiUrl'
-import Footer from '../components/Footer/Footer';
+import Header from "../components/common/Header/Header";
+import Search from "../components/DashboardComponent/Search/Search";
+import Tabs from "../components/DashboardComponent/Tabs/Tabs";
+import Footer from "../components/common/Footer/Footer";
+import { getCoins } from "../function/getCoins";
+// import TopButton from "../components/common/TopButton/topButton";
+import Button from "../components/common/Button/Button";
+import TopButton from "../components/common/TopButton/TopButton";
 
 function WatchListPage() {
   const watchlist = localStorage.getItem("watchlist")
@@ -21,20 +20,14 @@ function WatchListPage() {
   }, [watchlist]);
 
   useEffect(() => {
-    axios
-      .get(DASHBOARD_API_URL)
-      .then((response) => {
-        console.log("Response Data >>>", response.data);
-        var myCoins = response.data.filter((coins) =>
-          watchlist.includes(coins.id)
-        );
-        console.log("my coins", myCoins);
-        setCoins(myCoins);
-      })
-      .catch((error) => {
-        console.log("Error>>>", error);
-      });
+    getData();
   }, []);
+
+  const getData = async () => {
+    const response = await getCoins();
+    var myCoins = response.filter((coins) => watchlist.includes(coins.id));
+    setCoins(myCoins);
+  };
 
   return (
     <div>
@@ -58,13 +51,14 @@ function WatchListPage() {
                 alignItems: "center",
               }}
             >
-              <Link to="/dashboard">
+              <a href="/dashboard">
                 <Button text="Dashboard" />
-              </Link>
+              </a>
             </div>
           </div>
         )}
       </div>
+      <TopButton />
       <Footer />
     </div>
   );

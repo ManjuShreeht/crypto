@@ -1,30 +1,22 @@
-import React,{useEffect} from 'react'
-import axios from 'axios'
-import{DASHBOARD_API_URL} from  '../ApiUrl'
-import Header from '../components/Header/Header';
-import Tabs from '../components/Dashboard/Tabs';
-import Search from '../components/Search/Search';
-import  ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import Loading from '../components/Loading/Loading';
-import PaginationCompnent from '../components/Pagination/PaginationComponent';
-import Footer from '../components/Footer/Footer';
+import React, { useEffect, useState } from "react";
+import Header from "../components/common/Header/Header";
+import Search from "../components/DashboardComponent/Search/Search";
+import Tabs from "../components/DashboardComponent/Tabs/Tabs";
+import Loading from "../components/common/Loading/Loading";
+import PaginationComponent from "../components/DashboardComponent/paginationComponent/pagination";
+import Footer from "../components/common/Footer/Footer";
+import { getCoins } from "../function/getCoins";
+// import TopButton from "../components/common/TopButton/topButton";
+import Button from "../components/common/Button/Button";
+import TopButton from "../components/common/TopButton/TopButton";
 
 function Dashboard() {
-  // use array to store api data
-  const[data,setData]=React.useState([])
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCoins, setPageCoins] = useState([]);
 
-  //search satate
-  const[search,setSearch]=React.useState("");
-
-  // loading
-  const[loading,setLoading]=React.useState(true);
-
-  //page search
-  const[pageNumber,setPageNumber]=React.useState(1)
-
-  //page coins for first page
-  // const[pageCoins,setPageCoins]=React.useState([]);
-  // use axioes to fetch the api data 
   var filteredCoins = data.filter((item) => {
     if (
       item.symbol.toLowerCase().includes(search.toLowerCase()) ||
@@ -33,78 +25,75 @@ function Dashboard() {
       return item;
     }
   });
-  useEffect((()=>{
-   axios.get(DASHBOARD_API_URL)
-   .then((response=>{setData(response.data);
-    setLoading(false);
-    // filteredCoins=response.data.slice(0,9)
-    // by default disly 10
-  }))
-  //  alreday in json format no need to cnver res.json()
-   .catch((error)=>{
-    console.log(error)
-      })
-  
-   
-  }),[]);
 
-  // go to top
-  var mybutton = document.getElementById("myBtn");
+  useEffect(() => {
+    getData();
+  }, []);
 
-  function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  }
-
-
-  window.onscroll = function () {
-    scrollFunction();
+  const getData = async () => {
+    const response = await getCoins();
+    if (response) {
+      setData(response);
+      setLoading(false);
+      setPageCoins(response.slice(0, 10));
+    }
   };
 
-  function scrollFunction() {
-    if (
-      document.body.scrollTop > 20 ||
-      document.documentElement.scrollTop > 20
-    ) {
-      mybutton.style.display = "flex";
-    } else {
-      mybutton.style.display = "none";
-    }
-  }
-// every time page value change slice the data
-//  const handleChange=(event,value)=>{
-//         setPageNumber(value);
-//         setPageCoins(data.slice((value-1)*10,
-//         (value-1) * 10+10)
+  const handleChange = (event, value) => {
+    setPageNumber(value);
+    setPageCoins(data.slice((value - 1) * 10, (value - 1) * 10 + 10));
+  };
 
-
-//         // )
-     
-//     }
-   
-
-  
   return (
     <div>
       <Header />
-      {/* loading */}
-      {/* search component */}
-      {loading?(<Loading />):(<>
-      
-      <Search  search={search} setSearch={setSearch}/>
-      {/* send props to tabs components */}
-    <Tabs  data={filteredCoins} />
-      <Footer className='footer1' />
-    {/* to go up ,top -btn styled in inde.css */}
-    <div onClick={() => topFunction()} id="myBtn" className="top-btn">
-            <ArrowUpwardIcon sx={{ color: "var(--blue)" }} />
-          </div>
-     
-      </>)}
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Search search={search} setSearch={setSearch} />
+          {search && filteredCoins.length == 0 ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                minHeight: "80vh",
+              }}
+            >
+              <h1 style={{ textAlign: "center" }}>No Results Found</h1>
+              <p style={{ textAlign: "center", color: "var(--grey)" }}>
+                Could not find what you were looking for...
+              </p>
+              <div
+                style={{
+                  marginTop: "2rem",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <a href="/dashboard">
+                  <Button text="Clear Search" onClick={() => setSearch("")} />
+                </a>
+              </div>
+            </div>
+          ) : (
+            <Tabs data={search ? filteredCoins : pageCoins} />
+          )}
+          {!search && (
+            <PaginationComponent
+              pageNumber={pageNumber}
+              handleChange={handleChange}
+            />
+          )}
+          <Footer />
+        </>
+      )}
+      <TopButton />
     </div>
-
-  )
-
+  );
 }
 
-export default Dashboard
+export default Dashboard;

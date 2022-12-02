@@ -1,0 +1,15 @@
+1.home page
+-> header
+->scrool bar 
+->navbar sticky
+->sidebar for phone (use mui to desgin sidebar)(used drawer component in mui)
+->alter in drawer(sidebar)
+-->side bar create in other components and add to header.js
+->button components
+
+
+2.framer motion to add a animation to elements
+->landingpage,phonecomponent
+->React webshare
+
+3.

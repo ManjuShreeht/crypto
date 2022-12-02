@@ -1,239 +1,156 @@
-import React, { useState,useEffect } from 'react'
-import SelectCoin from '../components/Coin/SelectCoin/SelectCoin'
-import Header from '../components/Header/Header'
-import axios from 'axios'
-import {DASHBOARD_API_URL} from '../ApiUrl'
-import {getCoinData} from '../components/Coin/getCoinData'
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-import Loading from '../components/Loading/Loading'
-import List from '../components/Dashboard/List'
-import CoinInfo from '../components/Coin/CoinInfo'
+import Loading from "../components/common/Loading/Loading";
+import Header from "../components/common/Header/Header";
+import Footer from "../components/common/Footer/Footer";
+import List from "../components/DashboardComponent/ListComponent/List";
+import { getCoinData } from "../function/getCoinData";
+import { getCoinPrices } from "../function/getCoinPrices";
+import { getCoins} from "../function/getCoins";
 
-import LineChart from '../components/Coin/LineChart'
-import { getDate } from '../components/Coin/getDate'
-import { getCoinPrice } from '../components/Coin/getCoinPrice'
-import SelectDays from '../components/Coin/SelectDays'
-import TogglePrice from '../components/Toggle/Toggle'
-import { convertNumbers } from '../components/Dashboard/convertNumber'
-import Footer from '../components/Footer/Footer'
-
-import {setCoinDataFunction} from '../components/setCoinDataFunction'
+import LineChart from "../components/Coin/LineChart";
+import CoinInfo from "../components/Coin/CoinInfo";
+import SelectDays from "../components/Coin/SelectDays";
+import TogglePrice from "../components/Coin/Toggle/Toggle";
 
 
 
-function Compare() {
 
-   
-    const [coin1, setCoin1] = useState("bitcoin");
-    const [coin2, setCoin2] = useState("ethereum");
-    const [days, setDays] = useState(90);
-    const [priceType, setPriceType] = useState("prices");
-    const [allCoins, setAllCoins] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [coinData1, setCoinData1] = useState({});
-    const [coinData2, setCoinData2] = useState({});
-  
-    const [chartData, setChartData] = useState({
-      labels: [],
-      datasets: [{}],
-    });
-  
-    const options = {
-      responsive: true,
-      interaction: {
-        mode: "index",
-        intersect: false,
-      },
-      scales: {
-        y: {
-          type: "linear",
-          display: true,
-          position: "left",
-          ticks:
-            priceType == "market_caps"
-              ? {
-                  callback: function (value) {
-                    return "$" + convertNumbers(value);
-                  },
-                }
-              : priceType == "total_volumes"
-              ? {
-                  callback: function (value) {
-                    return convertNumbers(value);
-                  },
-                }
-              : {
-                  callback: function (value, index, ticks) {
-                    return "$" + value.toLocaleString();
-                  },
-                },
-        },
-        y1: {
-          type: "linear",
-          display: true,
-          position: "right",
-          ticks:
-            priceType == "market_caps"
-              ? {
-                  callback: function (value) {
-                    return "$" + convertNumbers(value);
-                  },
-                }
-              : priceType == "total_volumes"
-              ? {
-                  callback: function (value) {
-                    return convertNumbers(value);
-                  },
-                }
-              : {
-                  callback: function (value, index, ticks) {
-                    return "$" + value.toLocaleString();
-                  },
-                },
-        },
-      },
-    };
-  
-    useEffect(() => {
-      axios
-        .get(DASHBOARD_API_URL)
-        .then((response) => {
-          setAllCoins(response.data);
-        })
-        .catch((error) => {
-          console.log("Error>>>", error);
-        });
-  
-      getCoinsData();
-    }, []);
-  
-    const getCoinsData = async () => {
-      const data1 = await getCoinData(coin1);
-      const data2 = await getCoinData(coin2);
-  
-      if (data1) {
-       setCoinDataFunction(setCoinData1,data1)
-      }
-  
-      if (data2) {
-        setCoinDataFunction(setCoinData2,data2)
-      }
-      getPrices(coin1, coin2, days, priceType);
-      setLoading(false);
-    };
-  
-    const getPrices = async (coin1, coin2, days, priceType) => {
-      const prices1 = await getCoinPrice(coin1, days, priceType);
-      const prices2 = await getCoinPrice(coin2, days, priceType);
-  
-      setChartData({
-        labels: prices1?.map((data) => getDate(data[0])),
-        datasets: [
-          {
-            label: coin1.slice(0, 1).toUpperCase() + coin1.slice(1),
-            data: prices1?.map((data) => data[1]),
-            borderWidth: 1,
-            fill: false,
-            tension: 0.25,
-            backgroundColor: "transparent",
-            borderColor: "#3a80e9",
-            pointRadius: 0,
-            yAxisID: "y",
-          },
-          {
-            label: coin2.slice(0, 1).toUpperCase() + coin2.slice(1),
-            data: prices2?.map((data) => data[1]),
-            borderWidth: 1,
-            fill: false,
-            tension: 0.25,
-            backgroundColor: "transparent",
-            borderColor: "#61c96f",
-            pointRadius: 0,
-            yAxisID: "y1",
-          },
-        ],
-      });
+
+import { setChartDataFunction } from "../function/setChartDataFunction";
+import { setCoinDataFunction } from "../function/setCoinDataFunction";
+
+
+import SelectCoin from "../components/Coin/SelectCoin/SelectCoin";
+
+
+
+
+
+
+function ComparePage() {
+  const [coin1, setCoin1] = useState("bitcoin");
+  const [coin2, setCoin2] = useState("ethereum");
+  const [days, setDays] = useState(90);
+  const [priceType, setPriceType] = useState("prices");
+  const [allCoins, setAllCoins] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [coinData1, setCoinData1] = useState({});
+  const [coinData2, setCoinData2] = useState({});
+
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [{}],
+  });
+
+  useEffect(() => {
+    getCoinsData();
+  }, []);
+
+  const getCoinsData = async () => {
+    const response = await getCoins();
+    setAllCoins(response);
+
+    const data1 = await getCoinData(coin1);
+    const data2 = await getCoinData(coin2);
+
+    if (data1) {
+      setCoinDataFunction(setCoinData1, data1);
     }
-  
-    const handleCoinChange = async (e, isCoin2) => {
-      if (!isCoin2) {
-        setCoin1(e.target.value);
-        const data1 = await getCoinData(e.target.value);
-        if (data1) {
-          setCoinDataFunction(setCoinData1,data1)
-          getPrices(e.target.value, coin2, days, priceType);
-          // setCoinDataFunction(setCoin,data)
-        }
-      } else {
-        setCoin2(e.target.value);
-        const data2 = await getCoinData(e.target.value);
-        if (data2) {
-          setCoinDataFunction(setCoinData2,data2)
-          getPrices(coin1, e.target.value, days, priceType);
-        }
+    if (data2) {
+      setCoinDataFunction(setCoinData2, data2);
+    }
+    getPrices(coin1, coin2, days, priceType);
+    setLoading(false);
+  };
+
+  const getPrices = async (coin1, coin2, days, priceType) => {
+    const prices1 = await getCoinPrices(coin1, days, priceType);
+    const prices2 = await getCoinPrices(coin2, days, priceType);
+    setChartDataFunction(setChartData, prices1, prices2);
+  };
+
+  const handleCoinChange = async (e, isCoin2) => {
+    if (!isCoin2) {
+      setCoin1(e.target.value);
+      const data1 = await getCoinData(e.target.value);
+      if (data1) {
+        setCoinDataFunction(setCoinData1, data1);
+        getPrices(e.target.value, coin2, days, priceType);
       }
-    };
-  
-    const handlePriceChange = (event) => {
-      setPriceType(event.target.value);
-      getPrices(coin1, coin2, days, event.target.value);
-    };
-  
-    return (
-      <>
-        <Header />
-        <div className="div-flex">
-          <p className="crypto-heading">Crypto 1</p>
-          <SelectCoin
-            coin={coin1}
-            handleChange={(e) => handleCoinChange(e)}
-            allCoins={allCoins.filter((coin) => coin.id != coin2)}
-          />
-          <p className="crypto-heading">Crypto 2</p>
-          <SelectCoin
-            coin={coin2}
-            handleChange={(e) => handleCoinChange(e, true)}
-            allCoins={allCoins.filter((coin) => coin.id != coin1)}
-          />
-          <SelectDays
-            noText={true}
-            days={days}
-            handleChange={(e) => {
-              setDays(e.target.value);
-              getPrices(coin1, coin2, e.target.value, priceType);
-            }}
-          />
-        </div>
-        {loading ? (
-          <Loading />
-        ) : (
-          <>
-            <div className="grey-container">
-              <List coin={coinData1} />
-            </div>
-            <div className="grey-container">
-              <List coin={coinData2} />
-            </div>
-            <div className="grey-container">
-              <TogglePrice
-                priceType={priceType}
-                handleChange={handlePriceChange}
-              />
-              <LineChart chartData={chartData} options={options} />
-            </div>
-            <div className="grey-container">
-              <CoinInfo name={coinData1.name} description={coinData1.desc} />
-            </div>
-            <div className="grey-container" style={{ marginBottom: "2rem" }}>
-              <CoinInfo name={coinData2.name} description={coinData2.desc} />
-            
-            </div>
-            <Footer />
-          </>
-        )}
-      </>
-    )
-  }
-  
- 
-export default Compare;
+    } else {
+      setCoin2(e.target.value);
+      const data2 = await getCoinData(e.target.value);
+      if (data2) {
+        setCoinDataFunction(setCoinData2, data2);
+        getPrices(coin1, e.target.value, days, priceType);
+      }
+    }
+  };
+
+  const handlePriceChange = (event) => {
+    setPriceType(event.target.value);
+    getPrices(coin1, coin2, days, event.target.value);
+  };
+
+  return (
+    <>
+      <Header />
+      <div className="div-flex">
+        <p className="crypto-heading">Crypto 1</p>
+        <SelectCoin
+          coin={coin1}
+          handleChange={(e) => handleCoinChange(e)}
+          allCoins={allCoins.filter((coin) => coin.id != coin2)}
+        />
+        <p className="crypto-heading">Crypto 2</p>
+        <SelectCoin
+          coin={coin2}
+          handleChange={(e) => handleCoinChange(e, true)}
+          allCoins={allCoins.filter((coin) => coin.id != coin1)}
+        />
+        <SelectDays
+          noText={true}
+          days={days}
+          handleChange={(e) => {
+            setDays(e.target.value);
+            getPrices(coin1, coin2, e.target.value, priceType);
+          }}
+        />
+      </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="grey-container">
+            <List coin={coinData1} />
+          </div>
+          <div className="grey-container">
+            <List coin={coinData2} />
+          </div>
+          <div className="grey-container">
+            <TogglePrice
+              priceType={priceType}
+              handleChange={handlePriceChange}
+            />
+            <LineChart
+              chartData={chartData}
+              mutliAxis={true}
+              priceType={priceType}
+            />
+          </div>
+          <div className="grey-container">
+            <CoinInfo name={coinData1.name} desc={coinData1.desc} />
+          </div>
+          <div className="grey-container" style={{ marginBottom: "2rem" }}>
+            <CoinInfo name={coinData2.name} desc={coinData2.desc} />
+          </div>
+        </>
+      )}
+      <Footer />
+    </>
+  );
+}
+
+export default ComparePage;

@@ -1,14 +1,16 @@
 import React from 'react'
-import Footer from '../components/Footer/Footer'
-import Header from '../components/Header/Header'
-import Infromation from '../components/Landingpage/Infromation'
+import Header from '../components/common/Header/Header'
+import Footer from '../components/common/Footer/Footer'
+
+import LandingPage from '../components/HomePageComponents/LandingPage'
+
 
 
 function Home() {
   return (
     <div >
       <Header />
-      <Infromation />
+      <LandingPage />
       <Footer />
      
     </div>
